@@ -1,0 +1,11 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.outs
+.papers
+.presentations
+.code
+.data
+.data_processed
+.DS_Store
