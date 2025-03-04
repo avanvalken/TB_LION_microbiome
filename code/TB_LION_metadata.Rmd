@@ -1,0 +1,55 @@
+---
+title: "TB_LION_metadata"
+author: "avanvalken"
+date: "2024-11-04"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# load data
+```{r}
+setwd("../") # set working directory
+
+
+subjid <- read.table(file.path("data", "md5sum.txt"))[,2] # read in subjid names
+x <- as.data.frame(subjid) 
+           x$subjid <-     gsub("_R[1|2].fastq.gz", "", x$subjid) 
+           x$subjid <-      gsub("_","", x$subjid)  
+           x$subjid <-      gsub("LION", "LION_", x$subjid)
+            x$subjid <-      gsub("VISIT[2|6]", "", x$subjid)
+           
+
+
+df <- read.csv(file.path("data", "subject_coldata.csv"))
+
+sum(x$subjid %in% df$ID1)
+setdiff(x$subjid, df$ID1)
+intersect(x$subjid, df$ID1)
+length(unique(x$subjid))
+length(unique(df$ID1))
+
+df.1 <- filter(df, ID1 %in% x$subjid) 
+df.1 <- rename(df.1, text=subjid)
+write.csv(df.1, file.path("data/microbiome_metadata.csv"))
+```
+
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

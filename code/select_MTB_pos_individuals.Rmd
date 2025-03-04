@@ -1,0 +1,43 @@
+---
+title: "Untitled"
+author: "avanvalken"
+date: "2025-03-04"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+suppressMessages(library(tidyverse))
+
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Load data
+```{r}
+path.dir <- file.path("data_processed/metascope_results_2020")
+
+ls <- list.files(path.dir, "id.csv", full.names = T)
+ls.1 <- lapply(ls, read_csv)
+names(ls.1) <- list.files(path.dir, "id.csv", full.names = F)
+```
+
+# combine data
+```{r}
+# add names as column
+ls.2 <- imap(ls.1, ~ mutate(.x, subjid = gsub(".metascope_id.csv", ""
+, .y), .before = 1)) 
+
+df <- bind_rows(ls.2) %>% filter(grepl("Mycobacterium tuberculosis", Genome, ignore.case = T))
+
+# samples with TB
+samp <- unique(df$subjid)
+```
+
+
+
+
+## save
+```{r}
+write.csv(df, "outs/samples_of_interest/subjid_MTB_pos.csv")
+```
+
